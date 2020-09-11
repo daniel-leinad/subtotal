@@ -1,0 +1,11 @@
+deform
+pyramid
+pyramid_chameleon
+pyramid_tm
+sqlalchemy
+waitress
+zope.sqlalchemy
+
+[dev]
+pytest
+webtest

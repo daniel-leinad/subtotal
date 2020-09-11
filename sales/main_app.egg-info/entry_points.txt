@@ -1,0 +1,6 @@
+[console_scripts]
+initialize_main_app_db = main_app.initialize_db:main
+
+[paste.app_factory]
+main = main_app:main
+
