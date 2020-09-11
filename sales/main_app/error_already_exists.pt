@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ошибка</title>
+</head>
+<body>
+<h1>Продажа с таким номером уже существует!</h1>
+<a href="javascript:history.back()">Назад</a>
+<a href="${request.route_url('home')}">На главную</a>
+</body>
+</html>

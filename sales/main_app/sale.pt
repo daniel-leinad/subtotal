@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Продажа #${sale.num}</title>
+</head>
+<body>
+<a href="${request.route_url('home')}">На главную</a>
+<a href="${request.route_url('products')}">Все товары</a>
+<a href="${request.route_url('new_sale')}">Создать продажу</a>
+	<h1>Продажа #${sale.num}</h1>
+	ID: ${sale.uid}
+	<br>
+	Дата: ${sale.date}
+	<br>
+	Общая стоимость: ${total_price}
+	<br>
+	<h1>Товары</h1>
+	<table>
+		<tr>
+			<td>ID товара</td>
+			<td>Товар</td>
+			<td>Количество</td>
+			<td>Цена</td>
+		</tr>
+		<tr tal:repeat="product products">
+			<td>${product.uid}</td>
+			<td>${product.product}</td>
+			<td>${product.amount}</td>
+			<td>${product.price}</td>
+		</tr>
+	</table>
+	<form action="${request.route_url('delete')}" method="post" id="form">
+		<input type="hidden" name="uid" value="${sale.uid}">
+	</form>
+	<button onclick="deleteSale(${sale.uid})">Удалить продажу</button>
+</body>
+<script>
+	function deleteSale(uid) {
+		result = confirm("Вы уверены?");
+		if (result) {
+			document.getElementById("form").submit();
+		}
+	}
+</script>
+</html>

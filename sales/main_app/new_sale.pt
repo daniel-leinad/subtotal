@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>${title}</title>
+</head>
+<body>
+<a href="${request.route_url('home')}">На главную</a>
+<a href="${request.route_url('products')}">Все товары</a>
+<a href="${request.route_url('new_sale')}">Создать продажу</a>
+	<h1>${title}</h1>
+	<p>
+	<form id="form" method="post">
+		<label for="num">Номер продажи</label>
+		<input type="text" id="num" name="num">
+		<br>
+		<label for="date">Дата продажи</label>
+		<input type="date" id="date" name="date">
+		<br>
+		
+		<input type="hidden" name="products" id="products">
+		
+		<input type="button" value="Создать" onclick="subForm()">
+	</form>
+	
+	<br>
+	<h2>Товары:</h2>
+	<table id="products_table">
+		<tr id="first_row">
+			<td>Название товара</td>
+			<td>Количество</td>
+			<td>Цена</td>
+			<td></td>
+		</tr>
+		<tr id="second_row">
+			<td><input name="name" id="name" type="text"></td>
+			<td><input name="amount" id="amount" type="text"></td>
+			<td><input name="price" id="price" type="text"></td>
+			<td>
+				<button type="button" id="newProduct">
+					Добавить товар
+				</button>
+			</td>
+		</tr>
+		
+		<tr id="last_row">
+			<td>Итого:</td>
+			<td></td>
+			<td id="total_price"></td>
+			<td></td>
+		</tr>
+	</table>
+	
+</body>
+<script>
+	var newProdButton = document.getElementById("newProduct");
+	newProdButton.onclick = addProduct;
+	
+	//n - количество товаров
+	var n = 0;
+	
+	//dict - словарь с товарами
+	var products = {}
+	
+	// Элементы таблицы, между которыми добавляются товары
+	var firstRow = document.getElementById("first_row");
+	var secondRow = document.getElementById("second_row");
+	var lastRow = document.getElementById("last_row");
+	
+	function deleteProduct(i) {
+		//Удаляем товар
+		delete products[i];
+		
+		//Обновляем таблицу
+		fillTable();
+		countTotalPrice();
+	}
+	
+	function addProduct() {
+		var theName = document.getElementById("name").value;
+		var thePrice = document.getElementById("price").value;
+		var theAmount = document.getElementById("amount").value;
+		
+		// Проверяем, что поля товара заполнены и заполнены правильно
+		if ((theName == "") || (thePrice == "") || (theAmount == "")) {
+			alert("Введите название, цену и количество товара");
+		} else if ((isNaN(thePrice)) || (isNaN(theAmount))) {
+			alert("Цена и количество должны быть цифрами");
+		} else {
+			//Добавляем товар
+			n++;
+			products[n] = {"product": theName, "price": thePrice, "amount": theAmount};
+			
+			//Стираем значения из полей
+			document.getElementById("name").value = "";
+			document.getElementById("price").value = "";
+			document.getElementById("amount").value = "";
+			
+			//Обновляем таблицу
+			fillTable();
+			countTotalPrice();
+		}
+	}
+	
+	function subForm() {
+		var sale_num = document.getElementById("num").value;
+		var sale_date = document.getElementById("date").value;
+		if ((sale_num == "") || (sale_date == "")) {
+			alert("Укажите номер и дату продажи");
+		} else {
+			var theform = document.getElementById("form");
+			//Добавляем список товаров в значение input products
+			products_str = JSON.stringify(products);
+			document.getElementById("products").value = products_str;
+			theform.submit();
+		}
+	}
+	
+	function countTotalPrice() {
+		var totalPrice = 0;
+		for (p in products) {
+			totalPrice += products[p]["price"]*products[p]["amount"];
+		}
+		document.getElementById("total_price").innerHTML = totalPrice;
+	}
+	
+	function fillTable() {
+		//Стираем таблицу
+		document.getElementById("products_table").innerHTML = "";
+		
+		//Заполняем таблицу
+		document.getElementById("products_table").appendChild(firstRow);
+		document.getElementById("products_table").appendChild(secondRow);
+		for (p in products) {
+			var newProd = document.createElement("tr");
+			newProd.innerHTML = '<td>' + products[p]['product'] + 
+			'</td><td>' + products[p]['amount'] + 
+			'</td><td>' + products[p]['price'] + 
+			'</td><td><button type="button" onclick="deleteProduct(' + p + ')">Удалить товар</button></td>';
+			document.getElementById("products_table").appendChild(newProd);
+		}
+		document.getElementById("products_table").appendChild(lastRow);
+	}
+</script>
+</html>

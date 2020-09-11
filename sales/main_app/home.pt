@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Продажи</title>
+</head>
+<body>
+<a href="${request.route_url('home')}">На главную</a>
+<a href="${request.route_url('products')}">Все товары</a>
+<a href="${request.route_url('new_sale')}">Создать продажу</a>
+<h1>Продажи</h1>
+<table>
+  <tr>
+    <td>ID продажи</td>
+	<td>Номер продажи</td>
+	<td>Дата</td>
+	<td align="right">Стоимость</td>
+	<td></td>
+  </tr>
+  <tr tal:repeat="sale sales">
+	<td>${sale.uid}</td>
+	<td><a href="${request.route_url('sale', uid=sale.uid)}">${sale.num}</a></td>
+	<td>${sale.date}</td>
+	<td align="right">${sale.price}</td>
+	<td>
+		<form action="${request.route_url('delete')}" method="post" id="form_${sale.uid}">
+		<input type="hidden" name="uid" value="${sale.uid}">
+		</form>
+		<button onclick="deleteSale(${sale.uid})">Удалить</button>
+	</td>
+  </tr>
+  <tr>
+    <td>Итого</td>
+	<td></td>
+	<td></td>
+	<td align="right">${total_price}</td>
+	<td></td>
+  </tr>
+</table>
+</body>
+<script>
+	function deleteSale(uid) {
+		result = confirm("Вы уверены?");
+		if (result) {
+			document.getElementById("form_"+uid).submit();
+		}
+	}
+</script>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Товары</title>
+</head>
+<body>
+<a href="${request.route_url('home')}">На главную</a>
+<a href="${request.route_url('products')}">Все товары</a>
+<a href="${request.route_url('new_sale')}">Создать продажу</a>
+	<h1>Товары</h1>
+	<table>
+		<tr>
+			<td>ID товара</td>
+			<td>ID продажи</td>
+			<td>Товар</td>
+			<td>Количество</td>
+			<td>Цена</td>
+		</tr>
+		<tr tal:repeat="product products">
+			<td>${product.uid}</td>
+			<td>${product.sale_id}</td>
+			<td>${product.product}</td>
+			<td>${product.amount}</td>
+			<td>${product.price}</td>
+		</tr>
+	</table>
+</body>
+</html>
